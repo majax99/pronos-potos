@@ -5,7 +5,7 @@ Page fonctions.php
 
 Contient quelques fonctions globales.
 
-Quelques indications : (utiliser l'outil de recherche et rechercher les mentions donnÃ©es)
+Quelques indications : (utiliser l'outil de recherche et rechercher les mentions donnÃƒÂ©es)
 
 Liste des fonctions :
 --------------------------
@@ -38,15 +38,15 @@ catch (Exception $e)
 try
 {  
 	$db_config = array();
-	$db_config['SGBD']	= 'mysql';
-	$db_config['HOST']	= 'pronospoggpyb.mysql.db';
-	$db_config['DB_NAME']	= 'pronospoggpyb';
-	$db_config['USER']	= 'pronospoggpyb';
-	$db_config['PASSWORD']	= 'Aslan4lion';
+	$db_config['SGBD']	= '********';
+	$db_config['HOST']	= '*******';
+	$db_config['DB_NAME']	= '******';
+	$db_config['USER']	= '********';
+	$db_config['PASSWORD']	= '******';
 	$db_config['OPTIONS']	= array(
 		// Activation des exceptions PDO :
 		PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-		// Change le fetch mode par défaut sur FETCH_ASSOC ( fetch() retournera un tableau associatif ) :
+		// Change le fetch mode par dÃ©faut sur FETCH_ASSOC ( fetch() retournera un tableau associatif ) :
 		PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
 	);
 	
@@ -67,15 +67,15 @@ catch(Exception $e)
 function actualiser_session()
 {
     global $bdd;
-	if(isset($_SESSION['membre_id']) && intval($_SESSION['membre_id']) != 0) //Vérification id
+	if(isset($_SESSION['membre_id']) && intval($_SESSION['membre_id']) != 0) //VÃ©rification id
         
 	{
-		//utilisation de la fonction sqlquery, on sait qu'on aura qu'un résultat car l'id d'un membre est unique.
+		//utilisation de la fonction sqlquery, on sait qu'on aura qu'un rÃ©sultat car l'id d'un membre est unique.
         $retour = $bdd->prepare('SELECT membre_id, membre_pseudo, membre_mdp,membre_avatar,membre_statut,membre_groupe, membre_club FROM membres WHERE membre_id = :id ');
         $retour->execute(array('id' => $_SESSION['membre_id'] ));
         $data = $retour->fetch(PDO::FETCH_ASSOC);
 		
-		//Si la requête a un résultat (c'est-à-dire si l'id existe dans la table membres)
+		//Si la requÃªte a un rÃ©sultat (c'est-Ã -dire si l'id existe dans la table membres)
 		if(isset($data['membre_pseudo']) && $data['membre_pseudo'] != '')
             
 		{
@@ -111,7 +111,7 @@ function actualiser_session()
 		}
 	}
 	
-	else //On vérifie les cookies et sinon pas de session
+	else //On vÃ©rifie les cookies et sinon pas de session
 	{
 		if(isset($_COOKIE['membre_id']) && isset($_COOKIE['membre_mdp'])) //S'il en manque un, pas de session.
 		{
@@ -129,8 +129,8 @@ function actualiser_session()
 						//Dehors vilain tout moche !
 						$informations = Array(/*Mot de passe de cookie incorrect*/
 											true,
-											'Mot de passe cookie erroné',
-											'Le mot de passe conservé sur votre cookie est incorrect vous devez vous reconnecter.',
+											'Mot de passe cookie erronÃ©',
+											'Le mot de passe conservÃ© sur votre cookie est incorrect vous devez vous reconnecter.',
 											'',
 											'membres/connexion.php',
 											3
@@ -160,7 +160,7 @@ function actualiser_session()
 				$informations = Array(/*L'id de cookie est incorrect*/
 									true,
 									'Cookie invalide',
-									'Le cookie conservant votre id est corrompu, il va donc être détruit vous devez vous reconnecter.',
+									'Le cookie conservant votre id est corrompu, il va donc Ãªtre dÃ©truit vous devez vous reconnecter.',
 									'',
 									'membres/connexion.php',
 									3
@@ -306,7 +306,7 @@ function birthdate($date)
 <?php
 function checkClub($club)
 {
-	if($club == 'S�lectionnez') return 'empty';
+	if($club == 'Sélectionnez') return 'empty';
 	else return 'ok';
 }
 ?>
@@ -360,10 +360,10 @@ function inscription_mail($mail, $pseudo, $passe)
                     
                     <body>
                         <div>Bienvenue sur '.TITRESITE.' !<br/>
-                        Vous avez complété une inscription avec le pseudo
-                        '.htmlspecialchars($pseudo, ENT_QUOTES).' à l\'instant.<br/>
+                        Vous avez complÃ©tÃ© une inscription avec le pseudo
+                        '.htmlspecialchars($pseudo, ENT_QUOTES).' Ã  l\'instant.<br/>
                         Votre mot de passe est : '.htmlspecialchars($passe, ENT_QUOTES).'.<br/>
-                        Veillez à le garder secret et à ne pas l\'oublier.<br/><br/>
+                        Veillez Ã  le garder secret et Ã  ne pas l\'oublier.<br/><br/>
                         
                         En vous remerciant.<br/><br/>
                         Moi - Wembaster de '.TITRESITE.'
@@ -373,7 +373,7 @@ function inscription_mail($mail, $pseudo, $passe)
 //headers principaux.
 $headers  = 'MIME-Version: 1.0' . "\r\n";
 $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-//headers supplémentaires
+//headers supplÃ©mentaires
 $headers .= 'From: "Mon super site" <contact@supersite.com>' . "\r\n";
 /*$headers .= 'Cc: "Duplicata" <duplicata@supersite.com>' . "\r\n";
 $headers .= 'Reply-To: "Membres" <membres@supersite.com>' . "\r\n";*/
@@ -389,7 +389,7 @@ return false;
 
 
 <?php
-function get($type) //je ne me suis pas foulé. :D
+function get($type) //je ne me suis pas foulÃ©. :D
 {
         if($type == 'nb_membres')
         {
@@ -444,17 +444,17 @@ function mepd($date)
         
         else if($diff < 24*3600 && $diffDay == 0)
         {
-                return 'Aujourd\'hui à '.date('H\hi', $date);
+                return 'Aujourd\'hui Ã  '.date('H\hi', $date);
         }
         
         else if($diff < 48*3600 && $diffDay == 1)
         {
-                return 'Hier à '.date('H\hi', $date);
+                return 'Hier Ã  '.date('H\hi', $date);
         }
         
         else
         {
-                return 'Le '.date('d/m/Y', $date).' à '.date('h\hi', $date).'.';
+                return 'Le '.date('d/m/Y', $date).' Ã  '.date('h\hi', $date).'.';
         }
 }
 ?>
@@ -466,7 +466,7 @@ function updateConnectes($id)
         if($id != -1)
         {
                 $id = $_SESSION['membre_id'];
-                $additionnal = 1; //la variable à mettre dans connectes_membre
+                $additionnal = 1; //la variable Ã  mettre dans connectes_membre
         }
         
         else
@@ -474,7 +474,7 @@ function updateConnectes($id)
                 $additionnal = $ip;
         }
         
-        mysql_query("DELETE FROM connectes WHERE connectes_actualisation < ".(time()-300)) or exit(mysql_error()); //MàJ générale des connectés
+        mysql_query("DELETE FROM connectes WHERE connectes_actualisation < ".(time()-300)) or exit(mysql_error()); //MÃ J gÃ©nÃ©rale des connectÃ©s
         mysql_query("INSERT INTO connectes VALUES(".$id.", '".$ip."', '".$additionnal."', ".time().")
         ON DUPLICATE KEY UPDATE connectes_actualisation=".time().", connectes_ip='".$ip."'") or exit(mysql_error()); //tiens, tiens, ON DUPLICATE... :o
         queries(2);
@@ -486,13 +486,13 @@ function getIp()
         else return $_SERVER['REMOTE_ADDR'];
 }
 
-/**** Pour vérifier si une chaîne ne contient que des chiffres ****/
+/**** Pour vÃ©rifier si une chaÃ®ne ne contient que des chiffres ****/
 
 function isNum($element) {
   return !preg_match ("/[^0-9]/", $element);
 }
 
-/* Vérification des pronostics ***/
+/* VÃ©rification des pronostics ***/
 
 function checkProno($prono) {
 	if($prono == '') return 'empty';
