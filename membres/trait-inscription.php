@@ -313,7 +313,7 @@ if(isset($_POST['clef']))
     else if($clef_result == 'ok')
 		{
 			$_SESSION['clef_info'] = '';
-                if ($_POST['clef'] == 'baobab') { $groupe='QG'; }
+                if ($_POST['clef'] == '*********') { $groupe='QG'; }
 		}
     
 	else if($clef_result == 'empty')
