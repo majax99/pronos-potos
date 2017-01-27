@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<title>Le tchat en AJAX !</title>
+
+
+    </head>
+	
+    <body>
+        <div id="messages">
+            <!-- les messages du tchat -->
+
+            <?php
+            
+                // on se connecte à notre base de données
+                try
+                {
+                    $bdd = new PDO('mysql:host=localhost;dbname=espace_membre2', 'root', '');
+                }
+                catch (Exception $e)
+                {
+                    die('Erreur : ' . $e->getMessage());
+                }
+
+                // on récupère les 10 derniers messages postés
+                $requete = $bdd->query('SELECT * FROM message ORDER BY id ASC'); //PAS DE LIMITE
+
+                while($donnees = $requete->fetch()){
+                     $date = new DateTime($donnees['date']);
+                    // on affiche le message (l'id servira plus tard)
+                    echo "<p id=\"" . $donnees['id'] . "\"> ".$date->format('d/m à H\hi')."  <strong>" . $donnees['pseudo'] . "</strong> : " . $donnees['message'] . "</p>";
+                }
+
+                $requete->closeCursor();
+            ?>
+
+        </div>
+<!-- method="POST" action="traitement.php" onclick="ajaxrequest(this.value)"-->
+	<form method="POST" action="traitement.php">
+	   <input type="hidden" name="pseudo" id="pseudo" value = "PYB" <br />
+	    Message : <input name="message" id="message" size = 40 required></input><br />
+	    <input type="submit" name="submit" value="Envoyez votre message !" id="envoi"  />
+	</form>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="<?php echo ROOTPATH; ?>/chat/main.js"></script>
+    </body>
+</html>

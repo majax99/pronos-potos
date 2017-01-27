@@ -1,0 +1,272 @@
+<?php
+
+/*
+
+
+
+Classement générale des pronostiqueurs
+
+
+
+*/
+
+
+
+session_start();
+
+header('Content-type: text/html; charset=utf-8');
+
+include('.././includes/config.php');
+
+
+
+/********Actualisation de la session...**********/
+
+
+
+include('.././includes/fonctions.php');
+
+actualiser_session();
+
+
+
+/* Si le membre n'est pas connecté, on le renvoie sur l'index */
+
+if(!isset($_SESSION['membre_id']))
+
+{
+
+	header('Location: '.ROOTPATH.'/index.php');
+
+	exit();
+
+}
+
+/********Fin actualisation de session...**********/
+
+
+
+/********Entête et titre de page*********/
+
+
+
+$titre = 'Classement';
+
+
+
+include('.././includes/haut.php'); //contient le doctype, et head.
+
+
+
+/**********Fin entête et titre***********/
+
+?>
+
+
+
+<?php
+
+include('.././includes/col_gauche.php');
+
+?>
+
+
+
+
+
+        
+
+<div class="main" style= "background-image : url(../img/Euro_2016/maillot_france.jpg) ;background-repeat : no-repeat; background-size: cover;">
+
+
+
+        <!-- Corps de page
+
+    ================================================== -->
+
+<div class="container">
+
+    <h3 class="text-center" style = "color : white">Classement des pronostics pour la saison 2016-2017 </h3>
+
+    <hr>
+
+    <div class="row">
+
+        <?php 
+
+        // Création de la date de MAJ du classement
+
+            $date_MAJ= $bdd->query('SELECT MAX(matchl1_date_MAJ) as date_MAJ FROM match_ligue1 LIMIT 1');
+
+            $date_MAJ = $date_MAJ->fetch(PDO::FETCH_ASSOC);
+
+        
+
+            $date = new DateTime($date_MAJ['date_MAJ']);
+
+        
+
+        $date_MAJ_class = '<em>Mis à jour le '.$date->format('d/m/Y à H\hi').' </em> ' ;
+
+        
+
+        // Création du nombre de matchs joués
+
+            $nb_match= $bdd->query('SELECT count(*) as nb_match FROM match_ligue1 WHERE matchl1_resultat <> "" ');
+
+            $nb_match = $nb_match->fetch(PDO::FETCH_ASSOC);
+
+    
+
+        $nb_match_class = $nb_match['nb_match'] ;        
+
+        
+
+        ?>
+
+        <div class = "col-lg-offset-1 col-lg-10 col-xs-12" >
+
+        <div class="panel panel-primary filterable ">
+
+            <div class="panel-heading">
+
+                <h3 class="panel-title">Classement général après <?php echo $nb_match_class ; ?> match(s) <span class= "pull-right hidden-xs"><?php echo $date_MAJ_class ; ?>  </span></h3>
+
+            </div>
+
+       <div class="table-responsive">
+
+
+
+            <table class="table">
+
+                
+
+                    <?php
+
+                $classementh_query = $bdd->query('SELECT membre_pseudo ,membre_avatar ,membre_club, round(sum(coalesce(points,0))) as points,
+
+                                                    sum(coalesce(bonus_trouve,0))   as bonus_trouve, count(membre_pseudo) as nb_resultat
+
+                                                  FROM membres
+
+                                                  INNER JOIN v_classement_L1 ON membre_id = pronol1_membre_id
+
+                                                  WHERE points <> 0 
+
+                                                  GROUP BY membre_pseudo
+
+                                                  ORDER BY points  DESC , bonus_trouve DESC');
+
+                $i = 0;
+
+                ?>
+
+                <thead>
+
+                    <tr>
+
+                        <th></th>
+
+                        <th></th>
+
+                        <th class= "text-center" style="vertical-align:middle;">Nom</th>
+
+                        <th class= "text-center"></th>
+
+                        <th class= "text-center" style="vertical-align:middle;">Points</th>
+
+                        <th class= "text-center">Résultats <br> trouvés</th>
+
+                        <th class= "text-center">Bonus <br> trouvés</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    
+
+
+
+                <?php
+
+                
+
+                while ($donnees = $classementh_query->fetch())
+
+                {
+
+                
+
+                    /*$avatar = ($donnees['membre_avatar'] != '') ? '<a href = "'.ROOTPATH.'/membres/voir_profil.php?pseudo='. $donnees['membre_pseudo'].'"><img src="'.ROOTPATH.'/img/avatars/'.htmlspecialchars($donnees['membre_avatar'], ENT_QUOTES).'" style ="height : 50px; " alt="Image_classement"/></a>' : '<a class="glyphicon glyphicon-user" href = "'.ROOTPATH.'/membres/voir_profil.php?pseudo='. $donnees['membre_pseudo'].'" ></a>';*/
+
+                    $icone = ($i== 0 ||$i == 1 || $i == 2) ? '<img src = "'.ROOTPATH.'/img/icone_classement/'.($i + 1).'.png" style="vertical-align : -3px;"  alt="Image_classement">' : '';   
+
+                    //$avatar = '<a class="glyphicon glyphicon-user" href = "'.ROOTPATH.'/membres/voir_profil.php?pseudo='. $donnees['membre_pseudo'].'" ></a>';
+
+                    $avatar2 = ($donnees['membre_club'] != '') ? '<a href = "'.ROOTPATH.'/membres/voir_profil.php?pseudo='. $donnees['membre_pseudo'].'"><img src="'.ROOTPATH.'/img/ligue1/'.htmlspecialchars(strtolower($donnees['membre_club']), ENT_QUOTES).'.png"  alt="Image_classement"/></a>' : '<a class="glyphicon glyphicon-user" href = "'.ROOTPATH.'/membres/voir_profil.php?pseudo='. $donnees['membre_pseudo'].'" ></a>';
+
+                    ?>
+
+                  
+
+                        <tr>
+
+                        <td class= "text-center"  ><?php echo $icone ; ?></td>
+
+                        <td class= "text-left"   ><strong><?php echo ($i + 1) ; ?></strong></td>
+
+                        <td class="text-center" ><?php echo $donnees['membre_pseudo'] ; ?></td>
+
+                        <td class="text-center" style=" width:10px"><?php echo $avatar2 ; ?></td>
+
+                        <td class="text-center"  ><?php echo ($donnees['points']); ?></td>
+
+                        <td class="text-center" ><?php echo $donnees['nb_resultat'] ; ?></td>
+
+                        <td class="text-center" ><?php echo $donnees['bonus_trouve'] ; ?></td>
+
+                        </tr>
+
+                    <?php
+
+                        $i++;
+
+                }
+
+                
+
+                if($i == 0) echo '<tr><td colspan="3">Pas de membre trouvé.</td></tr>';
+
+                ?>
+
+                </tbody>
+
+            </table>
+
+           </div>
+
+        </div>
+
+       </div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+
+    <!-- END # MODAL LOGIN -->
+
+		
+
+<?php
+
+include('../includes/bas.php');
+
+?>
+
