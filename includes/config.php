@@ -19,9 +19,9 @@ Aucune information/erreur
 --------------------------
 */
 
-define('ROOTPATH', 'http://'.$_SERVER['HTTP_HOST'].'', true);
-define('TITRESITE', 'Pronos-Potos', true);
-define('ABSPATH',$_SERVER['DOCUMENT_ROOT'].'', true);
+define('ROOTPATH', ********', true);
+define('TITRESITE', '*****', true);
+define('ABSPATH',******, true);
 $queries = 0;
 ?>
 
